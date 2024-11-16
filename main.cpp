@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <bit>
 #include <vector>
 using ull = unsigned long long;
@@ -26,36 +27,25 @@ int main()
     // LFSRの動作を定義するラムダ式
     auto lfsr_step = [&](ull current_state) -> ull
     {
-        // 最上位ビット
-        ull out = (current_state >> n - 1) & 1;
         // フィードバックタップ使用後のビットの数を見る
         ull feedback = __builtin_popcount(current_state & feedback_mask) % 2;
         current_state = ((current_state << 1) & (1ULL << n) - 1) | feedback;
         return current_state;
     };
-    // 2^Nの計算を計算量削減のために先に処理しておく
-    int max_bit = 0;
-    ull temp_N = N;
-    while (temp_N > 0)
-    {
-        temp_N >>= 1;
-        max_bit++;
-    }
     // 各ビットの遷移を格納する配列
-    std::vector<ull> transitions(max_bit, 0);
+    std::vector<ull> transitions(N, 0);
     // ステップ1
     transitions[0] = lfsr_step(state);
-    // ステップ2~max_bitまで
-    for (int k = 1; k < max_bit; k++)
+    // ステップ2~Nまで
+    for (int k = 1; k < N; k++)
         transitions[k] = lfsr_step(transitions[k - 1]);
-    ull current_state = state;
-    for (int k = 0; k < max_bit; k++)
+    std::string res = "";
+    for (int k = 0; k < N; k++)
     {
-        std::string res = "";
-        if (N & (1ULL << k))
-            current_state = transitions[k];
+        res += std::to_string(k + 1) + "番目の遷移は";
         for (int i = n - 1; i >= 0; i--)
-            res += ((current_state & (1ULL << i)) ? '1' : '0');
-        std::cout << res << std::endl;
+            res += ((transitions[k] & (1ULL << i)) ? '1' : '0');
+        res += "です\n";
     }
+    std::cout << res << std::endl;
 }
