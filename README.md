@@ -18,12 +18,12 @@ InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 <p>コンパイルするにはg++をインストールした環境にて以下のコマンドを打ってください</p>
 
 ```
-g++ ファイル名
+% g++ ファイル名
 ```
 
 ## 実行方法
 <p>実行するには以下のコマンドを打ってください</p>
 
 ```
-./a.out
+% ./a.out
 ```
